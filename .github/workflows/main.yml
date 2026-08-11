@@ -27,12 +27,24 @@ jobs:
       run: |
         pyinstaller --noconsole --onefile --name "SalsicciottoDash" src/main.py
 
-    - name: Install Inno Setup
+    - name: Install Inno Setup via Chocolatey
       run: |
-        winget install JRSoftware.InnoSetup --accept-source-agreements --accept-package-agreements
+        choco install innosetup -y
 
     - name: Compile Installer with Inno Setup
       run: |
         $iscc = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
         if (!(Test-Path $iscc)) { $iscc = "C:\Program Files\Inno Setup 6\ISCC.exe" }
         & $iscc installer.iss
+
+    - name: Upload Standalone EXE
+      uses: actions/upload-artifact@v4
+      with:
+        name: SalsicciottoDash-Standalone
+        path: dist/SalsicciottoDash.exe
+
+    - name: Upload Installer Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: SalsicciottoDash-Installer
+        path: installer_output/SalsicciottoDash_Setup.exe
