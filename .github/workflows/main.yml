@@ -29,16 +29,10 @@ jobs:
 
     - name: Install Inno Setup
       run: |
-        winget install JRSoftware.InnoSetup
+        winget install JRSoftware.InnoSetup --accept-source-agreements --accept-package-agreements
 
     - name: Compile Installer with Inno Setup
       run: |
-        $iscc = "${{ env.ProgramFiles(x86) }}\Inno Setup 6\ISCC.exe"
-        if (!(Test-Path $iscc)) { $iscc = "$env:ProgramFiles\Inno Setup 6\ISCC.exe" }
+        $iscc = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
+        if (!(Test-Path $iscc)) { $iscc = "C:\Program Files\Inno Setup 6\ISCC.exe" }
         & $iscc installer.iss
-
-    - name: Upload Installer Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: SalsicciottoDash-Installer
-        path: installer_output/SalsicciottoDash_Setup.exe
